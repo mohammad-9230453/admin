@@ -27,6 +27,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <link rel="apple-touch-icon" href="{{asset('app-assets')}}/images/ico/apple-icon-120.html">
     <link rel="shortcut icon" type="image/x-icon" href="https://demo.nparoco.com/Vuexy/app-assets/images/ico/favicon.ico">
     <link href="{{asset('app-assets')}}/images/fonts.googleapis.css" rel="stylesheet">
+{{--{!! htmlScriptTagJsApi(['lang'=>'fa']) !!}--}}
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="{{asset('app-assets')}}/vendors/css/vendors-rtl.min.css">
@@ -143,6 +144,15 @@ License: You must have a valid license purchased only from themeforest(the above
 {{--                                                        </fieldset>--}}
 {{--                                                    </div>--}}
 {{--                                                </div>--}}
+{{--                                                <div class="modal-body">--}}
+{{--                                                    <label>picture:</label>--}}
+{{--                                                    <div class="form-group">--}}
+{{--                                                        <input name="photo" type="file"  class="form-control">--}}
+{{--                                                    </div>--}}
+
+{{--                                                </div>--}}
+
+{{--                                                {!! htmlFormSnippet() !!}--}}
 
 
                                                 <a href="{{route('login')}}" class="btn btn-outline-primary float-left btn-inline mb-50">ورود</a>

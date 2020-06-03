@@ -59,9 +59,22 @@
                 </div>
             </div>
             <div class="content-body">
+                @if (session('error'))
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">Danger</h4>
+                        <p class="mb-0"> {{session('error')}}</p>
+                    </div>
+                @endif
+                    @if (session('success'))
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">Success</h4>
+                            <p class="mb-0">{{session('success')}}</p>
+                        </div>
+
+                @endif
 
 {{-- _________________________________________________________________________________________________________________________________________________--}}
-
+                    <a href="{{route('user.create')}}" type="button" class="btn mb-1 btn-outline-primary btn-icon btn-lg btn-block waves-effect waves-light">ایجاد کاربر جدید </a>
 <section id="headers">
         <div class="row">
             <div class="col-12">
@@ -82,6 +95,7 @@
                                     </tr>
                                     <tr>
                                         <th>id</th>
+                                        <th>عکس</th>
                                         <th>نام</th>
                                         <th>ایمیل</th>
                                         <th>تلفن</th>
@@ -99,11 +113,21 @@
 @foreach ($users as $user)
     <tr>
         <td>{{$user->id}}</td>
+        <td><div class="avatar mr-1 avatar-lg">
+                <img src="{{$user->photo->path}}" alt="avtar img holder">
+        @if (Cache::has('user_'.$user->id))
+                    <span class="avatar-status-online"></span>
+        @else
+            <span class="avatar-status-busy"></span>
+
+     @endif
+
+            </div>
         <td>{{$user->name}}</td>
         <td>{{$user->email}}</td>
         <td>{{$user->phone}}</td>
-        <td>{{$user->active==1 ? 'yes' : 'no'}}</td>
-        <td>{{$user->role}}</td>
+        <td>{{$user->active==1 ? 'فعال' : 'غیر فعال'}}</td>
+        <td>{{$user->role==1 ? 'مدیر' : 'کاربر'}}</td>
         @if (Cache::has('user_'.$user->id))
             <td><div class="badge badge-pill badge-glow badge-success mr-1 mb-1">online</div></td>
         @else
@@ -115,13 +139,13 @@
         </td>
         <td>{{$user->created_at}}</td>
         <td><div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary waves-effect waves-light">چپ</button>
+                <button type="button" class="btn btn-primary waves-effect waves-light"><a style="color: #8AFBFF" href="{{route('user.edit' , $user->id)}}">ویرایش اطلاعات</a></button>
                 <form action="{{route('user.destroy' , $user->id)}}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger waves-effect waves-light">حذف</button>
                 </form>
-                <button type="button" class="btn btn-info waves-effect waves-light">راست</button>
+                <a href="{{route('user.show' , $user->id)}}" type="button" class="btn btn-info waves-effect waves-light">نمایش کاربر </a>
             </div></td>
     </tr>
 @endforeach

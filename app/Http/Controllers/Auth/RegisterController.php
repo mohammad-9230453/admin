@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -54,8 +55,26 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => ['required', 'max:11', 'min:11', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'photo' => ['required'],
+//            recaptchaFieldName() => recaptchaRuleName(),
         ],[
             'phone.unique'=>'این شماره در سرور موجوده ... شماره جدید بزن',
+//            'phone.required'=>'phone required',
+//            'phone.max'=>'phone max',
+//            'phone.min'=>'phone min',
+//            'email.required'=>'email required',
+//            'email.string'=>'email string',
+//            'email.email'=>'email email',
+//            'email.max'=>'email max',
+//            'email.unique'=>'email unique',
+//            'photo.required'=>'photo required',
+//            'password.required'=>'pass required',
+//            'password.string'=>'pass string',
+//            'password.min'=>'pass min',
+//            'password.confirmed'=>'pass confirmed',
+//            'name.required'=>'name required',
+//            'name.string'=>'name string',
+//            'name.max'=>'name max 255',
         ]);
     }
 
@@ -74,9 +93,18 @@ class RegisterController extends Controller
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
         ]);
+
     }
 
     public function showRegistrationForm(){
+//        if (Auth::check()) {
+//            $user = Auth::user();
+//            $file = $data->file('photo');
+//            $name = time() . $file->getClientOriginalName();
+//            $file->move('images/', $name);
+//            $user->photo()->Create(['path' => $name]);
+//
+//        }
         return view('register');
     }
 }

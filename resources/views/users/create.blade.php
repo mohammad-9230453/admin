@@ -67,7 +67,7 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">ویرایش اطلاعات {{$user->name}} </h4>
+                                    <h4 class="card-title"> فرم ایجاد کاربر جدید</h4>
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
@@ -81,8 +81,8 @@
 
 
 
-                                        <form class="form" method="POST" action="{{route('user.update' , $user->id)}}" enctype="multipart/form-data">
-                                            @method('PUT')
+                                        <form class="form" method="POST" action="{{route('user.store')}}" enctype="multipart/form-data">
+                                            @method('POST')
                                             @csrf
                                             <div class="form-body">
                                                 <div class="row">
@@ -90,7 +90,7 @@
 
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-label-group">
-                                                            <input type="text" id="first-name-column" class="form-control" placeholder="نام" name="name" value="{{$user->name}}">
+                                                            <input type="text" id="first-name-column" class="form-control" placeholder="نام" name="name" value="{{old('name')}}">
                                                             @error('name')
                                                             <div class="alert alert-danger mt-1 alert-validation-msg" role="alert">
                                                                 <i class="feather icon-info mr-1 align-middle"></i>
@@ -105,7 +105,7 @@
 
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-label-group">
-                                                            <input type="text" id="last-name-column" class="form-control" placeholder="تلفن" name="phone" value="{{$user->phone}}">
+                                                            <input type="text" id="last-name-column" class="form-control" placeholder="تلفن" name="phone" value="{{old('phone')}}"">
                                                             @error('phone')
                                                             <div class="alert alert-danger mt-1 alert-validation-msg" role="alert">
                                                                 <i class="feather icon-info mr-1 align-middle"></i>
@@ -123,7 +123,7 @@
                                                                 <label for="city-column">نوع کاربر</label>
                                                                 <select class="select2 form-control select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true" name="role">
                                                                     <option value="1" data-select2-id="3">ادمین</option>
-                                                                    <option value="0" data-select2-id="135" @if ($user->role == 0) selected @endif>کاربر</option>
+                                                                    <option value="0" data-select2-id="135"  selected >کاربر</option>
                                                                 </select>
                                                             </div>
 
@@ -137,7 +137,7 @@
                                                                 <label for="city-column">فعال/غیر فعال</label>
                                                                 <select class="select2 form-control select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true" name="active">
                                                                     <option value="1" data-select2-id="3">فعال</option>
-                                                                    <option value="0" data-select2-id="135" @if ($user->active == 0) selected @endif>غیر فعال</option>
+                                                                    <option value="0" data-select2-id="135"  selected>غیر فعال</option>
                                                                 </select>
 
                                                             </div>
@@ -148,7 +148,7 @@
 
                                                     <div class="col-md-6 col-12">
                                                         <div class="form-label-group">
-                                                            <input type="email" id="country-floating" class="form-control" name="email" placeholder="ایمیل" value="{{$user->email}}">
+                                                            <input type="email" id="country-floating" class="form-control" name="email" placeholder="ایمیل" value="{{old('email')}}">
                                                             @error('email')
                                                             <div class="alert alert-danger mt-1 alert-validation-msg" role="alert">
                                                                 <i class="feather icon-info mr-1 align-middle"></i>
@@ -160,12 +160,12 @@
                                                     </div>
 
 
-{{--                                                    <div class="col-md-6 col-12">--}}
-{{--                                                        <div class="form-label-group">--}}
-{{--                                                            <input type="text" id="company-column" class="form-control" name="company-column" placeholder="شرکت">--}}
-{{--                                                            <label for="company-column">رمز ورود</label>--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
+                                                    <div class="col-md-6 col-12">
+                                                        <div class="form-label-group">
+                                                            <input type="password" id="company-column" class="form-control" name="password" placeholder="رمز ورود">
+                                                            <label for="company-column">رمز ورود</label>
+                                                        </div>
+                                                    </div>
 
 
                                                     <div class="modal-body">
@@ -178,7 +178,7 @@
 
 
                                                     <div class="col-12">
-                                                        <button type="submit" class="btn btn-primary mr-1 mb-1">ویرایش</button>
+                                                        <button type="submit" class="btn btn-primary mr-1 mb-1">ایجاد</button>
                                                         <a href="{{route('user.index')}}" type="reset" class="btn btn-outline-warning mr-1 mb-1">بازگشت</a>
                                                     </div>
                                                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class userController extends Controller
 {
@@ -26,7 +27,7 @@ $users=User::all();
      */
     public function create()
     {
-        //
+        return view('users.create');
     }
 
     /**
@@ -37,8 +38,54 @@ $users=User::all();
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email',
+            'phone' => 'required|max:11|min:11',
+            'password' => ['string', 'min:8'],
+        ] , [
+            'name.required' => 'نام نمیتواند خالی باشد',
+            'email.required' => 'email نمیتواند خالی باشد',
+            'email.email' => 'لطفا در وارد کردن صحیح مقدار ایمیل دقت فرمایید',
+            'phone.required' => 'تلفن نمیتواند خالی باشد',
+            'phone.max' => 'تلفن نمیتواند بیشتر از 11 کاراکتر باشد',
+            'phone.min' => 'تلفن نمیتواند کمتر از 11 کاراکتر باشد',
+            'password.min' => 'پسوورد نمیتواند کمتر از 8 کاراکتر باشد',
+        ]);
+
+
+
+
+
+
+
+        try {
+
+            $user = User::create([
+                'name' => $request['name'],
+                'role' => $request['role'],
+                'active' => $request['active'],
+                'email' => $request['email'],
+                'phone' => $request['phone'],
+                'password' => Hash::make($request['password']),
+            ]);
+
+            if ($request->photo){
+                $file = $request->file('photo');
+                $name = time() . $file->getClientOriginalName();
+                $file->move('images/' , $name);
+                $user->photo()->Create(['path'=>$name]);
+            }
+        } catch (Exception $exception) {
+
+
+            return redirect()->route('user.index')->with('error' , $exception->getMessage() );
+        }
+
+        return redirect()->route('user.index')->with('success' , 'عملیات ایجاد با موفقیت انجام گردید');
     }
+
+
 
     /**
      * Display the specified resource.
@@ -48,7 +95,7 @@ $users=User::all();
      */
     public function show(User $user)
     {
-
+        return view('users.show' , compact('user'));
     }
 
     /**
@@ -59,7 +106,7 @@ $users=User::all();
      */
     public function edit(User $user)
     {
-        return 'yep';
+        return view('users.edit' , compact('user'));
     }
 
     /**
@@ -71,7 +118,36 @@ $users=User::all();
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email',
+            'phone' => 'required|max:11|min:11',
+        ] , [
+            'name.required' => 'نام نمیتواند خالی باشد',
+            'email.required' => 'email نمیتواند خالی باشد',
+            'email.email' => 'لطفا در وارد کردن صحیح مقدار ایمیل دقت فرمایید',
+            'phone.required' => 'تلفن نمیتواند خالی باشد',
+            'phone.max' => 'تلفن نمیتواند بیشتر از 11 کاراکتر باشد',
+            'phone.min' => 'تلفن نمیتواند کمتر از 11 کاراکتر باشد',
+        ]);
+        if ($request->photo){
+        $user->photo()->delete();
+        $file = $request->file('photo');
+        $name = time() . $file->getClientOriginalName();
+        $file->move('images/' , $name);
+        $user->photo()->Create(['path'=>$name]);
+        }
+        unset($request['photo']);
+        try {
+
+            $user->update($request->all());
+        } catch (Exception $exception) {
+
+
+            return redirect()->route('user.index')->with('error' , $exception->getMessage() );
+        }
+
+        return redirect()->route('user.index')->with('success' , 'عملیات ویرایش با موفقیت انجام گردید');
     }
 
     /**
@@ -83,9 +159,20 @@ $users=User::all();
     public function destroy(User $user)
     {
         if (Auth::id() !== $user->id){
-        $user->delete();
+            try {
+
+                $user->delete();
+            } catch (Exception $exception) {
+
+
+                return redirect()->route('user.index')->with('error' , $exception->getMessage() );
+            }
+
+            return redirect()->route('user.index')->with('success' , 'عملیات حذف با موفقیت انجام گردید');
+
+
     }
-        return redirect()->route('user.index');
+        return redirect()->route('user.index')->with('error' , ' کاربر گرامی ، شما نمیتوانید  خود را از لیست کاربران حذف کنید . لطفا در انجام عملیاتتان بیشتر دقت نمایید.' );
     }
 
     public function photo(Request $request){
